@@ -1,8 +1,6 @@
 import sqlite3
 
-
 def candles_save(candles, path):
-    create_db(path)
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
 
@@ -25,9 +23,8 @@ def candles_save(candles, path):
 def create_db(path):
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
-
     try:
-        with open('src/resources/schema.sql', 'r') as f:
+        with open('schema.sql', 'r') as f:
             schema_sql = f.read()
         cursor.executescript(schema_sql)
         conn.commit()

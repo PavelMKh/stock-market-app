@@ -1,9 +1,12 @@
 from service.candles_service import load_candles
 from service.financial_reports_service import load_company
+from service.candles_service import create_db_service
 
 db_path = 'candles_history.db'
 
+
 def main():
+    create_db_service(db_path)
     print("Welcome to stock market app!")
     while True:
         print('''Select menu item :
