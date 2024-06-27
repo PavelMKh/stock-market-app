@@ -14,3 +14,10 @@ def get_company_overview(ticker, api_key):
     r = requests.get(url)
     data = r.json()
     return data
+
+
+def get_income_statement(ticker, apikey):
+    url = f'https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={ticker}&apikey={apikey}'
+    r = requests.get(url)
+    data = r.json()
+    return data
