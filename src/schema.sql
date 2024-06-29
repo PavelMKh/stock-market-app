@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS candles (
             volume INTEGER NOT NULL
         )
 
-CREATE TABLE IF NOT EXISTS financial_data (
-        id INTEGER PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS pnl (
+        id VARCHAR(30) PRIMARY KEY,
         ticker TEXT NOT NULL,
         type TEXT NOT NULL,
         fiscalDateEnding DATE NOT NULL,
