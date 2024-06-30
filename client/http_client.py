@@ -20,3 +20,10 @@ def get_income_statement(ticker, apikey):
     r = requests.get(url)
     data = r.json()
     return data
+
+
+def get_balance_sheet(ticker, apikey):
+    url = f'https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={ticker}&apikey={apikey}'
+    r = requests.get(url)
+    data = r.json()
+    return data

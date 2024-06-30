@@ -4,7 +4,6 @@ from datetime import date
 
 @dataclass
 class IncomeStatement:
-    # TODO: ADD ID CREATING
     id: str
     ticker: str
     type: str

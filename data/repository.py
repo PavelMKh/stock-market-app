@@ -46,11 +46,11 @@ def create_db(path):
 
         cursor.execute("""
                 CREATE TABLE IF NOT EXISTS candles (
-                    id TEXT PRIMARY KEY,
+                    id VARCHAR(30) PRIMARY KEY,
                     date_time DATETIME NOT NULL,
-                    ticker TEXT NOT NULL,
+                    ticker VARCHAR(30) NOT NULL,
                     size INTEGER NOT NULL,
-                    source TEXT NOT NULL,
+                    source VARCHAR(30) NOT NULL,
                     open REAL NOT NULL,
                     max REAL NOT NULL,
                     min REAL NOT NULL,
@@ -62,10 +62,10 @@ def create_db(path):
         cursor.execute("""
                 CREATE TABLE IF NOT EXISTS pnl (
                     id VARCHAR(30) PRIMARY KEY,
-                    ticker TEXT NOT NULL,
-                    type TEXT NOT NULL,
+                    ticker VARCHAR(30) NOT NULL,
+                    type VARCHAR(30) NOT NULL,
                     fiscalDateEnding DATE NOT NULL,
-                    reportedCurrency TEXT NOT NULL,
+                    reportedCurrency VARCHAR(30) NOT NULL,
                     grossProfit REAL,
                     totalRevenue REAL,
                     costOfRevenue REAL,
@@ -92,6 +92,51 @@ def create_db(path):
                     netIncome REAL
                 )
             """)
+
+        cursor.execute("""CREATE TABLE IF NOT EXISTS balance_sheet (
+                    id VARCHAR(30) PRIMARY KEY,
+                    ticker VARCHAR(30) NOT NULL,
+                    type VARCHAR(30) NOT NULL,
+                    fiscalDateEnding DATE NOT NULL,
+                    reportedCurrency VARCHAR(30) NOT NULL,
+                    totalAssets REAL,
+                    totalCurrentAssets REAL,
+                    cashAndCashEquivalentsAtCarryingValue REAL,
+                    cashAndShortTermInvestments REAL,
+                    inventory REAL,
+                    currentNetReceivables REAL,
+                    totalNonCurrentAssets REAL,
+                    propertyPlantEquipment REAL,
+                    accumulatedDepreciationAmortizationPPE REAL,
+                    intangibleAssets REAL,
+                    intangibleAssetsExcludingGoodwill REAL,
+                    goodwill REAL,
+                    investments REAL,
+                    longTermInvestments REAL,
+                    shortTermInvestments REAL,
+                    otherCurrentAssets REAL,
+                    otherNonCurrentAssets REAL,
+                    totalLiabilities REAL,
+                    totalCurrentLiabilities REAL,
+                    currentAccountsPayable REAL,
+                    deferredRevenue REAL,
+                    currentDebt REAL,
+                    shortTermDebt REAL,
+                    totalNonCurrentLiabilities REAL,
+                    capitalLeaseObligations REAL,
+                    longTermDebt REAL,
+                    currentLongTermDebt REAL,
+                    longTermDebtNoncurrent REAL,
+                    shortLongTermDebtTotal REAL,
+                    otherCurrentLiabilities REAL,
+                    otherNonCurrentLiabilities REAL,
+                    totalShareholderEquity REAL,
+                    treasuryStock REAL,
+                    retainedEarnings REAL,
+                    commonStock REAL,
+                    commonStockSharesOutstanding REAL
+                    );
+                """)
 
         conn.commit()
         conn.close()
@@ -148,6 +193,30 @@ def save_income_statement(pnl, path):
             placeholders = ', '.join('?' * len(data))
             columns = ', '.join(data.keys())
             query = f"INSERT OR IGNORE INTO pnl ({columns}) VALUES ({placeholders})"
+            c.execute(query, tuple(data.values()))
+
+        conn.commit()
+
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+
+    finally:
+        if conn:
+            conn.close()
+
+
+def save_balance_sheet(bs, path):
+    conn = None
+    try:
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+
+        for statement in bs:
+            data = asdict(statement)
+            data['fiscalDateEnding'] = data['fiscalDateEnding'].isoformat()
+            placeholders = ', '.join('?' * len(data))
+            columns = ', '.join(data.keys())
+            query = f"INSERT OR IGNORE INTO balance_sheet ({columns}) VALUES ({placeholders})"
             c.execute(query, tuple(data.values()))
 
         conn.commit()

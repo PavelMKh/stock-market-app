@@ -1,5 +1,6 @@
-from data.repository import company_save, save_income_statement
-from client.http_client import get_company_overview, get_income_statement
+from data.repository import company_save, save_income_statement, save_balance_sheet
+from client.http_client import get_company_overview, get_income_statement, get_balance_sheet
+from model.balance_sheet import BalanceSheet
 from model.company import Company
 from model.income_statement import IncomeStatement
 
@@ -16,3 +17,10 @@ def load_pnl(ticker, apikey, path):
     pnl = IncomeStatement.create_pnl(pnl_json)
     save_income_statement(pnl, path)
     return pnl
+
+
+def load_bs(ticker, apikey, path):
+    bs_json = get_balance_sheet(ticker, apikey)
+    bs = BalanceSheet.create_from_json(bs_json)
+    save_balance_sheet(bs, path)
+    return bs
