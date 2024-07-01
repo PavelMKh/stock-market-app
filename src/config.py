@@ -1,1 +1,1 @@
-DATABASE_PATH = 'candles_history.db'
+DATABASE_PATH = 'financial_data.db'

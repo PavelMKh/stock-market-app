@@ -6,6 +6,7 @@ The application will enable you to access comprehensive financial data on global
 ## ⭐ Features
 - Stock prices for global equity markets
 - Financial reports for global market companies: income statement, balance sheet, cash flow statement
+- Get full report (stock prices and all financial reports for list of companies)
 
 ## 🛠️ Technology stack
 - Python 3.12 

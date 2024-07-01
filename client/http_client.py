@@ -27,3 +27,10 @@ def get_balance_sheet(ticker, apikey):
     r = requests.get(url)
     data = r.json()
     return data
+
+
+def get_cash_flow(ticker, apikey):
+    url = f'https://www.alphavantage.co/query?function=CASH_FLOW&symbol={ticker}&apikey={apikey}'
+    r = requests.get(url)
+    data = r.json()
+    return data

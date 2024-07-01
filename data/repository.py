@@ -17,6 +17,8 @@ def candles_save(candles, path):
         conn.commit()
         conn.close()
     except sqlite3.Error as e:
+        if conn:
+            conn.rollback()
         print(f"Error: {e}")
     finally:
         conn.close()
@@ -25,7 +27,7 @@ def candles_save(candles, path):
 def create_db(path):
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
-
+    print('Create tables')
     try:
         cursor.execute("""
                 CREATE TABLE IF NOT EXISTS company (
@@ -138,9 +140,46 @@ def create_db(path):
                     );
                 """)
 
+        cursor.execute("""CREATE TABLE IF NOT EXISTS cash_flow (
+                    id VARCHAR(255) PRIMARY KEY,
+                    ticker VARCHAR(30) NOT NULL,
+                    type VARCHAR(30) NOT NULL,
+                    fiscalDateEnding DATE NOT NULL,
+                    reportedCurrency VARCHAR(30) NOT NULL,
+                    operatingCashflow REAL,
+                    paymentsForOperatingActivities REAL,
+                    proceedsFromOperatingActivities REAL,
+                    changeInOperatingLiabilities REAL,
+                    changeInOperatingAssets REAL,
+                    depreciationDepletionAndAmortization REAL,
+                    capitalExpenditures REAL,
+                    changeInReceivables REAL,
+                    changeInInventory REAL,
+                    profitLoss REAL,
+                    cashflowFromInvestment REAL,
+                    cashflowFromFinancing REAL,
+                    proceedsFromRepaymentsOfShortTermDebt REAL,
+                    paymentsForRepurchaseOfCommonStock REAL,
+                    paymentsForRepurchaseOfEquity REAL,
+                    paymentsForRepurchaseOfPreferredStock REAL,
+                    dividendPayout REAL,
+                    dividendPayoutCommonStock REAL,
+                    dividendPayoutPreferredStock REAL,
+                    proceedsFromIssuanceOfCommonStock REAL,
+                    proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet REAL,
+                    proceedsFromIssuanceOfPreferredStock REAL,
+                    proceedsFromRepurchaseOfEquity REAL,
+                    proceedsFromSaleOfTreasuryStock REAL,
+                    changeInCashAndCashEquivalents REAL,
+                    changeInExchangeRate REAL,
+                    netIncome REAL);
+                """)
+
         conn.commit()
         conn.close()
     except sqlite3.Error as e:
+        if conn:
+            conn.rollback()
         print(f"An error occurred: {e}")
     finally:
         if conn:
@@ -174,6 +213,8 @@ def company_save(company, path):
         conn.close()
 
     except sqlite3.Error as e:
+        if conn:
+            conn.rollback()
         print(f"An error occurred: {e}")
 
     finally:
@@ -198,6 +239,8 @@ def save_income_statement(pnl, path):
         conn.commit()
 
     except sqlite3.Error as e:
+        if conn:
+            conn.rollback()
         print(f"An error occurred: {e}")
 
     finally:
@@ -222,6 +265,34 @@ def save_balance_sheet(bs, path):
         conn.commit()
 
     except sqlite3.Error as e:
+        if conn:
+            conn.rollback()
+        print(f"An error occurred: {e}")
+
+    finally:
+        if conn:
+            conn.close()
+
+
+def save_cash_flow(cf, path):
+    conn = None
+    try:
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+
+        for statement in cf:
+            data = asdict(statement)
+            data['fiscalDateEnding'] = data['fiscalDateEnding'].isoformat()
+            placeholders = ', '.join('?' * len(data))
+            columns = ', '.join(data.keys())
+            query = f"INSERT OR IGNORE INTO cash_flow ({columns}) VALUES ({placeholders})"
+            c.execute(query, tuple(data.values()))
+
+        conn.commit()
+
+    except sqlite3.Error as e:
+        if conn:
+            conn.rollback()
         print(f"An error occurred: {e}")
 
     finally:
