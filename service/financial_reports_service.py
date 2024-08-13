@@ -43,6 +43,6 @@ def load_full_data(tickers, apikey, path):
         pnl = load_pnl(ticker, apikey, path)
         bs = load_bs(ticker, apikey, path)
         cf = load_cf(ticker, apikey, path)
-        candles = load_candles(ticker, apikey, 24, path)
+        candles = load_candles(ticker, apikey, 24, 0, 0, path)
         full_data.append(FullReport(candles, company, pnl, bs, cf))
     return full_data

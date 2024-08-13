@@ -1,8 +1,11 @@
 import requests
 
 
-def get_daily_candles(ticker, api_key):
-    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey={api_key}'
+def get_candles(ticker, api_key, candle_size, month):
+    if candle_size == 24:
+        url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey={api_key}'
+    else:
+        url = f'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval={candle_size}min&month={month}&outputsize=full&apikey={api_key}'
     r = requests.get(url)
     data = r.json()
     return data

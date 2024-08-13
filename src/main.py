@@ -20,10 +20,12 @@ def main():
         menu = int(input('Input menu item >>> '))
         match menu:
             case 1:
-                ticker = input("Enter stock ticker >>>")
-                api_key = input("Enter API key >>>")
-                candle_size = int(input("Enter candle size >>>"))
-                load_candles(ticker, api_key, candle_size, DATABASE_PATH)
+                ticker = input("Enter stock ticker >>> ")
+                api_key = input("Enter API key >>> ")
+                candle_size = int(input("Enter candle size >>> "))
+                start = input("Enter start date, YYYY-mm >>> ")
+                end = input("Enter end date, YYYY-mm >>> ")
+                print(load_candles(ticker, api_key, candle_size, start, end, DATABASE_PATH))
             case 2:
                 ticker = input("Enter stock ticker >>>")
                 api_key = input("Enter API key >>>")
