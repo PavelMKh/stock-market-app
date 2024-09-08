@@ -1,6 +1,6 @@
-from service.candles_service import load_candles
+from src.candles.candles_service import load_candles
 from data.repository import create_db
-from service.financial_reports_service import load_company, load_pnl, load_bs, load_cf, load_full_data
+from src.financial_report.financial_reports_service import load_company, load_pnl, load_bs, load_cf, load_full_data
 from config import DATABASE_PATH
 
 
