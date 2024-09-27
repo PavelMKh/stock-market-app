@@ -3,6 +3,7 @@ from datetime import date
 
 @dataclass
 class EtfDto:
+    etf_key: str
     etf_ticker: str
     report_date: date
     company_ticker: str

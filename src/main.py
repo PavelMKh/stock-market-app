@@ -2,10 +2,13 @@ from src.candles.candles_service import load_candles
 from data.repository import create_db
 from src.financial_report.financial_reports_service import load_company, load_pnl, load_bs, load_cf, load_full_data
 from config import DATABASE_PATH
+from etf.etf_config import DB_PATH
+from etf.etf_repository import create_db_etf
 
 
 def main():
     create_db(DATABASE_PATH)
+    create_db_etf(DB_PATH)
     print("Welcome to stock market app!")
     while True:
         print('''Select menu item :
